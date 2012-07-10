@@ -1,0 +1,305 @@
+\ProvidesPackage{apc-basic}
+
+
+%Load standard packages, fontspec, etc.
+\usepackage{amsmath,amsthm}
+\usepackage[MnSymbol]{mathspec}
+\usepackage{lineno}
+\usepackage{datetime}
+\usepackage{seqsplit}
+\usepackage{linguex}
+\usepackage{hyperref}
+\urlstyle{rm}
+\usepackage{color}  
+\usepackage{colornames}  
+
+
+% A bit more flexibility to avoid overfull boxes
+\tolerance=200
+\setlength{\emergencystretch}{2em}
+
+
+
+
+
+% =============================================================================
+% Typography options for XeLaTeX. Using: Minion Pro, Myriad Pro, and Pragmata.
+% =============================================================================
+
+\setmainfont[Mapping=tex-text]{Minion Pro}
+\setromanfont[Mapping=tex-text,Numbers=OldStyle,Ligatures={Common},SmallCapsFeatures = {LetterSpace=3.0}]{Minion Pro}
+\setsansfont[Mapping=tex-text,Scale=MatchLowercase]{Myriad Pro}
+\setmonofont[Mapping=tex-text,Scale=MatchLowercase]{PragmataPro}
+\setmathsfont(Digits,Latin,Greek){Minion Pro}
+\setmathsf[Scale=MatchLowercase]{Myriad Pro}
+%\setmathtt[Scale=MatchLowercase]{PragmataPro}
+\setmathbb[Scale=MatchUppercase]{msbm10}
+
+
+
+
+% =============================================================================
+% CUSTOM COMMANDS
+% =============================================================================
+
+% Sent blackboard font using \dfbb
+
+%\newcommand{\dfblackboard}{\setmathbb[Scale=MatchUppercase]{msbm10}}
+
+
+% Counterfactual conditional
+\AtBeginDocument{
+    \DeclareSymbolFont{symbolsC}{U}{txsyc}{m}{n}
+    \DeclareMathSymbol{\boxright}{\mathrel}{symbolsC}{128}
+}
+
+% Change autoref feature so that it uses \S instead of `section'; eliminate space between \S and section number.
+\def\Snospace~{\S{}}
+\renewcommand*\sectionautorefname{\Snospace}
+\renewcommand*\subsectionautorefname{\Snospace}
+
+% Allow for labels pointing to arbitrary points in the file
+\newcommand{\hlabel}[1]{\phantomsection\label{#1}}
+
+% Blank Footnote:
+% Use \symbolfootnote[0]{Footnote text} for a blank footnote. 
+% Useful for initial acknowledgment note.
+\long\def\symbolfootnote[#1]#2{\begingroup%
+\def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{#2}\endgroup}
+\newcommand{\ack}[1]{\symbolfootnote{#1}}
+
+% Ampersand
+\newcommand{\amper}{{\itshape \&}\xspace}
+
+%% Small quote environment
+\newenvironment{smquote}{\begin{small}\begin{quote}}{\end{quote}\end{small}}
+
+
+% =============================================================================
+% Redefine formatting of footnotes and block quotes
+% =============================================================================
+
+%Format footnotes: 
+\setlength{\footmarkwidth}{-0.4em} 
+\setlength{\footmarksep}{-\footmarkwidth} 
+\footmarkstyle{{#1}}
+
+% Reformat quote environment
+\usepackage{etoolbox}
+\patchcmd{\quote}{\rightmargin}{\leftmargin 0em \rightmargin}{}{}
+\AtBeginEnvironment{quote}{\small}
+
+
+% =============================================================================
+% Bibliography options for biblatex
+% =============================================================================
+
+
+\usepackage[style=authoryear-comp,backend=bibtex,sorting=nyt,firstinits,natbib,url=false,doi=false,isbn=false,useprefix=true]{biblatex}
+
+%Clear day and month fields. 
+\AtEveryBibitem{
+  \clearfield{day}
+  \clearfield{month}
+  \clearfield{endday}
+  \clearfield{endmonth}
+}
+
+%Make references font smaller.
+\renewcommand{\bibfont}{\normalfont\small}
+
+% Remove comma between author and year in citations. 
+\renewcommand{\nameyeardelim}{ }
+
+% Redefine dash for recurring author to make it longer than an em dash.
+\renewcommand*\bibnamedash{\rule[0.5ex]{23pt}{0.3pt} }
+
+% Turn titles into hyperlinks using data from the url field and removes quotation mark around titles in article, incollection, inproceedings, and unpublished. Also, treat thesis title as book title.
+% NOTE: To put the quotation marks back on, simply wrap the argument in DeclareFieldFormat within \mkbibquote.  
+\newbibmacro{string+url}[1]{% 
+ \iffieldundef{url}{#1}{\href{\thefield{url}}{#1}}} 
+\DeclareFieldFormat{title}{\usebibmacro{string+url}{\mkbibemph{#1}}}
+\DeclareFieldFormat[thesis]{title}{\usebibmacro{string+url}{\mkbibemph{#1}}} 
+\DeclareFieldFormat[article,incollection,inproceedings,unpublished]{title}{\usebibmacro{string+url}{#1}}
+
+% Suppress "In:" for article citations.
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{%
+  \printtext{\bibstring{in}\intitlepunct}}}
+
+
+%Removes parentheses around year in the bibliography.
+\def\act@on@bibmacro#1#2{%
+  \expandafter#1\csname abx@macro@\detokenize{#2}\endcsname
+}
+\def\patchbibmacro{\act@on@bibmacro\patchcmd}
+\def\pretobibmacro{\act@on@bibmacro\pretocmd}
+\def\apptobibmacro{\act@on@bibmacro\apptocmd}
+\def\showbibmacro{\act@on@bibmacro\show}
+
+\patchbibmacro{date+extrayear}{%
+  \printtext[parens]%
+}{%
+  \addperiod\space%
+  \printtext%
+}{}{}
+
+% Turn name+year in citations into hyperlinks (rather than just the year)
+\let\abx@macro@citeOrig\abx@macro@cite
+\renewbibmacro{cite}{%
+   \bibhyperref{%
+   \let\bibhyperref\relax\relax%
+   \abx@macro@citeOrig%
+   }%
+}
+\let\abx@macro@textciteOrig\abx@macro@textcite
+\renewbibmacro{textcite}{%
+   \bibhyperref{%
+   \let\bibhyperref\relax\relax%
+   \abx@macro@textciteOrig%
+   }%
+}%
+
+%\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\nolinkurl{doi:#1}}}
+
+
+% =============================================================================
+% Margin notes (needs to be improved)
+% =============================================================================
+
+\usepackage{alphalph}
+
+\setlength{\marginparwidth}{1.1in}
+\setlength{\marginparsep}{.4in}
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\scriptsize #1]%
+{\raggedright\scriptsize #1}}
+
+\renewcommand{\marg}[1]{}
+
+
+
+
+% =============================================================================
+% Option to define Possessive cite commands that mesh well with hyperref. Under review.
+% =============================================================================
+
+\DeclareOption{bibextend}{
+%% Commands for possessive cite.
+  \newcommand{\citeapos}[1]{\citeauthor{#1}'s (\citeyear{#1})}
+  \newcommand{\citeaposalt}[1]{\citeauthor{#1}'s \citeyear{#1}} 
+
+  \DeclareNameFormat{labelname:poss}{% Based on labelname from biblatex.def
+    \ifcase\value{uniquename}%
+      \usebibmacro{name:last}{#1}{#3}{#5}{#7}%
+    \or
+      \ifuseprefix
+        {\usebibmacro{name:first-last}{#1}{#4}{#5}{#8}}
+        {\usebibmacro{name:first-last}{#1}{#4}{#6}{#8}}%
+    \or
+      \usebibmacro{name:first-last}{#1}{#3}{#5}{#7}%
+    \fi
+    \usebibmacro{name:andothers}%
+    \ifnumequal{\value{listcount}}{\value{liststop}}{'s}{}} 
+
+  \DeclareFieldFormat{shorthand:poss}{%
+    \ifnameundef{labelname}{#1's}{#1}}  
+
+  \DeclareFieldFormat{citetitle:poss}{\mkbibemph{#1}'s} 
+
+  \DeclareFieldFormat{label:poss}{#1's} 
+
+  \newrobustcmd*{\posscitealias}{%
+    \AtNextCite{%
+      \DeclareNameAlias{labelname}{labelname:poss}%
+      \DeclareFieldAlias{shorthand}{shorthand:poss}%
+      \DeclareFieldAlias{citetitle}{citetitle:poss}%
+      \DeclareFieldAlias{label}{label:poss}}} 
+
+  \newrobustcmd*{\posscite}{%
+    \posscitealias%
+    \textcite}  
+
+  \newrobustcmd*{\Posscite}{\bibsentence\posscite}  
+
+  \newrobustcmd*{\posscites}{%
+    \posscitealias%
+    \textcites}
+}
+
+  
+% =============================================================================
+% Define Theorem environments
+% (fold)
+% =============================================================================
+
+\DeclareOption{thm}{
+  \newtheorem{thm}{Theorem}[section]
+  \newtheorem{lem}[thm]{Lemma}
+  \newtheorem{prop}[thm]{Proposition}
+  \newtheorem{cor}[thm]{Corollary}
+  \newtheorem{remark*}{Observation}
+  \newtheorem{fact}[thm]{Fact}
+  \newtheorem{claim}[thm]{Claim}
+  \newtheorem{question}[thm]{Question}
+  \newtheorem{conjecture}[thm]{Conjecture}
+  \theoremstyle{definition}
+  \newtheorem{definition}[thm]{Definition}
+  \newtheorem{exo}{Exercise}[section]
+  \newtheorem{example}{Example}
+  \newtheorem{ques}{Question}
+  \newtheorem{ass}[thm]{Assumption}
+  \newtheorem{remark}[thm]{Remark}
+}
+
+%(end)
+
+%% Hyperref options. The print option removes colored links to make for more legible printouts. 
+
+\newif\if@screen\@screentrue
+\newif\if@print\@printtrue
+
+\DeclareOption{screen}{\@screentrue \@printfalse}
+\DeclareOption{print}{\@screenfalse \@printtrue}
+
+\ExecuteOptions{screen}
+
+\DeclareOption*{ 
+\PackageWarning{apc-basic}{Unknown option ‘\CurrentOption’}% 
+} 
+\ProcessOptions\relax
+
+
+% =============================================================================
+% Declare screen and print options: print option makes all hyperlinks black, 
+% for better quality printing.
+% =============================================================================
+% (fold)
+
+\if@screen
+  \hypersetup{breaklinks=true,
+  colorlinks=true,
+  linkcolor=Mahogany,
+  urlcolor=Mahogany,
+  citecolor=BlueViolet,
+  plainpages=false,
+    pdfpagelabels,
+    bookmarksnumbered,
+  backref=page}
+  \else\relax
+  \fi
+\if@print
+  \hypersetup{breaklinks=true,
+  colorlinks=false,
+  % linkbordercolor=BrickRed,
+  % urlbordercolor=BrickRed,
+  % citebordercolor=BlueViolet,   
+  plainpages=false,
+    pdfpagelabels,
+    bookmarksnumbered
+  }
+  \else\relax
+  \fi
+%(end)
+
+\endinput
