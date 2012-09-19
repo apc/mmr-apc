@@ -24,14 +24,14 @@
 \def\twodigits#1{\ifnum#1<10 0\fi\the#1}
 \newcommand{\shorttoday}{\twodigits\month.\twodigits\day.\number\year}
 \dmyyyydate
-\newcommand{\timestamp}{\shorttoday; \xxivtime}
+\newcommand{\timestamp}{\shorttoday\ at \xxivtime}
 \renewcommand*{\multfootsep}{\textsuperscript*{\normalfont,}}
 
 % Redefine timestamp with specific date 
 \newcommand{\stamp}[1]{\renewcommand{\timestamp}{#1}}
 
 % Timestamp takes info from Git
-\newcommand{\gitstamp}{\renewcommand{\timestamp}{\VCDateISO\ at \VCTime}}
+\newcommand{\gitstamp}{\renewcommand{\timestamp}{\VCDateTEX\ at \VCTime}}
     
 %% Allows for using TiKZ to be inluded via the input
 \newcommand{\tikzname}{

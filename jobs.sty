@@ -1,0 +1,27 @@
+% Requires apc-basic.sty and apc-mmr.sty
+
+\newcommand{\dossieritem}{Job Market Materials}
+\newcommand{\Dossier}[1]{\renewcommand{\dossieritem}{#1}}
+\setlength{\footskip}{.75in}
+
+\makepagestyle{apcjobs}
+\newcommand{\@apcjobsmarks}{%
+  \let\@mkboth\markboth
+  \def\chaptermark##1{%
+    \markboth{%
+      \ifnum \c@secnumdepth >\m@ne
+        \if@mainmatter
+          \thechapter. \ %
+        \fi
+
+ \fi
+      ##1}{}}
+  \def\sectionmark##1{%
+    \markright{##1}}
+}
+\makepsmarks{apcjobs}{\@apcjobsmarks}
+\makeevenhead{apcjobs}{}{}{\scshape\thepage}
+\makeoddhead{apcjobs}{}{}{\scshape\thepage}
+\makeevenfoot{apcjobs}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\VCRevision\ on \timestamp}}}}{}{\vspace*{0in}\scriptsize{\textsf{A. P\'erez Carballo - \dossieritem}}}
+\makeoddfoot{apcjobs}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\VCRevision\ on \timestamp}}}}{}{\vspace*{0in}\scriptsize{\textsf{A. P\'erez Carballo -- \dossieritem}}}
+%
