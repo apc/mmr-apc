@@ -20,6 +20,18 @@
 \tolerance=200
 \setlength{\emergencystretch}{2em}
 
+% ===============================
+% Use author and name from tex file to set metadata.
+% ===============================
+
+\AtBeginDocument{
+\makeatletter
+  \hypersetup{
+    pdftitle = {\@title},
+    pdfauthor = {\@author}
+  }
+\makeatother 
+}
 
 
 
@@ -32,7 +44,7 @@
 \setromanfont[Mapping=tex-text,Numbers=OldStyle,Ligatures={Common},SmallCapsFeatures = {LetterSpace=3.0}]{Minion Pro}
 \setsansfont[Mapping=tex-text,Scale=MatchLowercase]{Myriad Pro}
 \setmonofont[Mapping=tex-text,Scale=MatchLowercase]{PragmataPro}
-\setmathsfont(Digits,Latin,Greek){Minion Pro}
+\setmathsfont(Digits,Latin){Minion Pro}
 \setmathsf[Scale=MatchLowercase]{Myriad Pro}
 \setmathtt[Scale=MatchLowercase]{PragmataPro}
 \setmathbb[Scale=MatchUppercase]{msbm10}
