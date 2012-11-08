@@ -96,7 +96,7 @@
 %Format footnotes: 
 \setlength{\footmarkwidth}{-0.4em} 
 \setlength{\footmarksep}{-\footmarkwidth} 
-\footmarkstyle{{#1}}
+% \footmarkstyle{{#1}}
 
 % Reformat quote environment
 \usepackage{etoolbox}
@@ -109,7 +109,10 @@
 % =============================================================================
 
 
-\usepackage[style=authoryear-comp,backend=bibtex,sorting=nyt,firstinits,natbib,url=false,doi=false,isbn=false,useprefix=true]{biblatex}
+\usepackage[style=authoryear-comp,backend=bibtex,sorting=nyt,firstinits,natbib,url=false,doi=false,isbn=false,useprefix=false,sortcites=true]{biblatex}
+
+\AtBeginDocument{\toggletrue{blx@useprefix}}
+\AtBeginBibliography{\togglefalse{blx@useprefix}}
 
 %Clear day and month fields. 
 \AtEveryBibitem{
