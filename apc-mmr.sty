@@ -20,18 +20,39 @@
 \renewcommand{\phi}{\varphi}
 
 
-% Define timestamp using current time and date.
-\def\twodigits#1{\ifnum#1<10 0\fi\the#1}
-\newcommand{\shorttoday}{\twodigits\month.\twodigits\day.\number\year}
-\dmyyyydate
-\newcommand{\timestamp}{\shorttoday\ at \xxivtime}
+% Define timestamp using current time and date, except when using the VC bundle, in which case get revision info from Git repo.
+% FIXME: Decide whether I want pagestyle `apc' to have last commit date (when available and using vc bundle) or date of compilation. Currently it is set so that it will look for Git info when available. 
+
+\newdateformat{dotdate}{%
+\twodigit{\THEMONTH}.\twodigit{\THEDAY}.\THEYEAR}
+
+\def\mysplit#1/#2/#3.{ %
+\def\myyear{#1}\def\mymonth{#2}\def\myday{#3}%
+}
+\def\splitdate#1{\expandafter\mysplit#1.}
+
+\@ifundefined{VCDateISO}{
+  \newcommand{\DateMod}{\dotdate\today}
+}%
+{
+  \splitdate{\VCDateTEX}
+  \newcommand{\DateMod}{\mymonth.\myday.\myyear}
+}
+
+\@ifundefined{VCTime}{
+  \newcommand{\TimeMod}{\xxivtime}
+}
+{
+  \newcommand{\TimeMod}{\VCTime}
+}
+
+\newcommand{\timestamp}{\DateMod\ at \TimeMod}
 \renewcommand*{\multfootsep}{\textsuperscript*{\normalfont,}}
+
 
 % Redefine timestamp with specific date 
 \newcommand{\stamp}[1]{\renewcommand{\timestamp}{#1}}
 
-% Timestamp takes info from Git
-\newcommand{\gitstamp}{\renewcommand{\timestamp}{\VCDateTEX\ at \VCTime}}
     
 %% Allows for using TiKZ to be inluded via the input
 \newcommand{\tikzname}{
@@ -122,7 +143,7 @@
     \pretitle{\vskip 6em\flushleft\Large\scshape\MakeLowercase}
     \posttitle{\par\vspace{0.65em}}
     \preauthor{\flushleft\small}
-    \postauthor{\par\vspace{0.6em}}
+    \postauthor{\par\vspace*{0.6em}}
     \predate{\flushleft\scriptsize}
     \postdate{\par\vskip 2em}
 
@@ -239,8 +260,8 @@
 \makepsmarks{apcgit}{\@apcgitmarks}
 \makeevenhead{apcgit}{}{}{\scshape\thepage}
 \makeoddhead{apcgit}{}{}{\scshape\thepage}
-\makeevenfoot{apcgit}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\VCRevision\ on \timestamp}}}}{}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\jobname.tex\vers}}}}
-\makeoddfoot{apcgit}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\VCRevision\ on \timestamp}}}}{}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\jobname.tex\vers}}}}
+\makeevenfoot{apcgit}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\VCRevision\ on \timestamp }}}}{}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\jobname.tex\vers}}}}
+\makeoddfoot{apcgit}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\VCRevision\ on \timestamp }}}}{}{\vspace*{0in}\scriptsize{\color{Gray}{\texttt{\jobname.tex\vers}}}}
 %
 
 
@@ -427,6 +448,11 @@
     \nonzeroparskip
 }
 
+% GITFN: Redefine \timestamp to include last revision date: requires the VC Bundle and a Git repository.
+% Timestamp takes info from Git
+% \DeclareOption{gitfn}{
+% \renewcommand{\timestamp}{\printdate{\VCDateISO}\ at \VCTime}
+% }
 
 
 % Call BRINGHURST as default option.
