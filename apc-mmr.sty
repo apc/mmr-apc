@@ -47,7 +47,10 @@
 }
 
 \newcommand{\timestamp}{\DateMod\ at \TimeMod}
-\renewcommand*{\multfootsep}{\textsuperscript*{\normalfont,}}
+
+% Deprecated: I'm now using the fnpct package. 
+% \renewcommand*{\multfootsep}{\textsuperscript*{\normalfont,}}
+% 
 
 
 % Redefine timestamp with specific date 
@@ -111,7 +114,7 @@
 
 % Make style for Chapters and sections: article-1 
 \makechapterstyle{article-1}{
-    \renewcommand\thesection{\arabic{section}} 
+    \renewcommand\thesection{\scshape\arabic{section}} 
 	\setsecnumformat{\normalfont\scshape\MakeLowercase{\csname the##1\endcsname}\quad}
     \setsecheadstyle{\normalsize\scshape\MakeLowercase} 
     \setsubsecheadstyle{\normalsize\itshape} 

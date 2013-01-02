@@ -8,7 +8,7 @@
 \usepackage[MnSymbol]{mathspec}
 \usepackage{lineno}
 \usepackage{datetime}
-\usepackage{seqsplit}
+% \usepackage{seqsplit}
 \usepackage{linguex}
 \usepackage{hyperref}
 \urlstyle{rm}
@@ -67,10 +67,11 @@
     \DeclareMathSymbol{\boxright}{\mathrel}{symbolsC}{128}
 }
 
-% Change autoref feature so that it uses \S instead of `section'; eliminate space between \S and section number.
+% Change autoref feature so that it uses \S instead of `section'; eliminate space between \S and section number; use `fn' instead of `footnote'.
 \def\Snospace~{\S{}}
 \renewcommand*\sectionautorefname{\Snospace}
 \renewcommand*\subsectionautorefname{\Snospace}
+\renewcommand*\footnoteautorefname{fn.}
 
 % Allow for labels pointing to arbitrary points in the file
 \newcommand{\hlabel}[1]{\phantomsection\label{#1}}
@@ -94,7 +95,7 @@
 % =============================================================================
 
 %Format footnotes: 
-\setlength{\footmarkwidth}{-0.4em} 
+\setlength{\footmarkwidth}{-0.3em} 
 \setlength{\footmarksep}{-\footmarkwidth} 
 % \footmarkstyle{{#1}}
 
@@ -109,17 +110,20 @@
 % =============================================================================
 
 
-\usepackage[style=authoryear-comp,backend=bibtex,sorting=nyt,firstinits,natbib,url=false,doi=false,isbn=false,useprefix=false,sortcites=true]{biblatex}
+\usepackage[style=authoryear-comp,backend=bibtex,sorting=nyt,firstinits,url=false,doi=false,isbn=false,useprefix=false,sortcites=true]{biblatex}
+
+% Removed option firstinits
 
 \AtBeginDocument{\toggletrue{blx@useprefix}}
 \AtBeginBibliography{\togglefalse{blx@useprefix}}
 
-%Clear day and month fields. 
+%Clear day and month fields; clear `eprint'. 
 \AtEveryBibitem{
   \clearfield{day}
   \clearfield{month}
   \clearfield{endday}
   \clearfield{endmonth}
+  \clearfield{eprint}
 }
 
 %Make references font smaller.
@@ -176,6 +180,7 @@
    \abx@macro@textciteOrig%
    }%
 }%
+
 
 %\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\nolinkurl{doi:#1}}}
 
