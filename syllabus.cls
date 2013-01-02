@@ -1,5 +1,31 @@
-%!TEX TS-program = xelatex
-%!TEX encoding = UTF-8 Unicode
+% A class for producing syllabi. 
+% Alejandro Pérez Carballo <aperezca@usc.edu>
+%
+% ----------------------------------------------------
+% Requirements
+% ----------------------------------------------------
+% 
+% xelatex
+% memoir.cls
+% memhfixc.sty
+% fontspec.sty
+% etoolbox.sty
+% xunicode.sty
+% advdate.sty, datetime.sty, seqsplit.sty, amsmath.sty, amsthm.sty,
+% xspace.sty, xcolor.sty, linguex.sty, textcase.sty, xstring.sty
+% 
+% ----------------------------------------------------------------------------
+% Optional
+% ----------------------------------------------------------------------------
+% 
+% Fonts: Adobe Minion Pro, Adobe Myriad Pro, and Pragmata Pro. 
+% biblatex.sty
+% ----------------------------------------------------------------------------
+% It should be possible to use with bibtex only. 
+% Some of the custom bibliography settings may need to be commented out.
+% ----------------------------------------------------------------------------
+
+
 \ProvidesClass{syllabus}
 
 \LoadClass[11pt,article]{memoir}
@@ -111,12 +137,15 @@
 \tolerance=200
 \setlength{\emergencystretch}{2em}
 
-%Typography
+% -------------------------------------------------------------------------
+% Typography: Specify your fonts of choice here.
+% -------------------------------------------------------------------------
+% 
 %(fold)
 \setmainfont[Mapping=tex-text]{Minion Pro}
 \setromanfont[Mapping=tex-text,Numbers=OldStyle,Ligatures={Common},SmallCapsFeatures = {LetterSpace=4.0}]{Minion Pro}
 \setsansfont[Mapping=tex-text,Scale=MatchLowercase]{Myriad Pro}
-\setmonofont[Mapping=tex-text,Scale=MatchLowercase]{Inconsolata}
+\setmonofont[Mapping=tex-text,Scale=MatchLowercase]{PragmataPro}
 % \setmathsfont(Digits,Latin,Greek){Minion Pro}
 % \setmathsf[Scale=MatchLowercase]{Myriad Pro}
 % \setmathtt[Scale=MatchLowercase]{Inconsolata}
@@ -276,8 +305,12 @@
 %% Define timestamp using current time and date.
 \def\twodigits#1{\ifnum#1<10 0\fi\the#1}
 % \newcommand{\shorttoday}{\twodigits\month.\twodigits\day.\hspace{.1em}\number\year}
+
+
 \newcommand{\frstdy}{}
+
 \newcommand{\firstday}[1]{\renewcommand{\frstdy}{#1}}
+% Use for specifying the first day of class.
 \renewcommand{\dateseparator}{.}
 \AtBeginDocument{
 \SaveDate[\hoy]
@@ -289,6 +322,10 @@
 \newcommand{\timestamp}{\shorttoday; \xxivtime}
 
 
+
+% ---------------------------------------------------------------------
+% Personal information. Redefine accordingly.
+% ---------------------------------------------------------------------
 
 \newcommand{\myoffice}{STO-132}
 \newcommand{\myhomepage}{\href{http://perezcarballo.org}{perezcarballo.org}}
@@ -384,6 +421,10 @@
 
 \ProcessOptions\relax
 
+% ------------------------------------------------------------------------
+% Screen option: use colored links. 
+% Print option: do not use colored links. Best suited for printing in b&w.
+% ------------------------------------------------------------------------
 
 \if@screen
 	\hypersetup{breaklinks=true,
@@ -409,6 +450,12 @@
 	}
 	\else\relax
 	\fi
+
+% ------------------------------------------------------------------------
+% Twice option: For courses meeting twice a week.
+% Once option: For courses meeting once a week.
+% ------------------------------------------------------------------------
+
 
 \if@twice
   \newcommand{\session}[1]{\paragraph{\color{BrickRed}\scriptsize\twodigits\month.\twodigits\day} {#1} 
