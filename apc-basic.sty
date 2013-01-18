@@ -12,8 +12,9 @@
 \usepackage{linguex}
 \usepackage{hyperref}
 \urlstyle{rm}
-\usepackage{color}  
-\usepackage{colornames}  
+% \usepackage{color}  
+\PassOptionsToPackage{dvipsnames}{color}  
+% \usepackage{colornames}  
 
 
 % A bit more flexibility to avoid overfull boxes
@@ -110,7 +111,7 @@
 % =============================================================================
 
 
-\usepackage[style=authoryear-comp,backend=bibtex,sorting=nyt,firstinits,url=false,doi=false,isbn=false,useprefix=false,sortcites=true]{biblatex}
+\usepackage[style=authoryear-comp,natbib,backend=bibtex,sorting=nyt,firstinits,url=false,doi=false,isbn=false,useprefix=false,sortcites=true]{biblatex}
 
 % Removed option firstinits
 

@@ -200,7 +200,7 @@
 	\setbeforesubsecskip{3ex}
 
     % set name of bibliography to 'bibliography'
-    \renewcommand{\bibname}{\mdseries\Large\scshape\MakeLowercase Bibliography}
+    \renewcommand*{\bibname}{\mdseries\Large\scshape\MakeLowercase Bibliography}
 
     % Title flush left
     \pretitle{\vskip 3.25em\flushleft\Large\scshape\MakeLowercase}
@@ -258,8 +258,8 @@
    % reduce skip after section heading
    \setaftersecskip{1.7ex}
 
-   % set name of bibliography to 'references'
-   \renewcommand{\bibname}{\mdseries\Large\scshape\MakeLowercase References}
+   % set name of bibliography to 'bibliography'
+   \renewcommand{\bibname}{\mdseries\Large\scshape\MakeLowercase Bibliography}
 
    % Title flush left
    \pretitle{\vskip 5em\flushleft\Large \bfseries}
