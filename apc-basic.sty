@@ -11,10 +11,26 @@
 % \usepackage{seqsplit}
 \usepackage{linguex}
 \usepackage{hyperref}
+\usepackage[overload]{textcase}
 \urlstyle{rm}
 % \usepackage{color}  
-\PassOptionsToPackage{dvipsnames}{color}  
+\usepackage[dvipsnames]{xcolor}  
 % \usepackage{colornames}  
+
+% The following package makes prettier tables. We're all about the bling!
+\usepackage{booktabs}
+
+% The units package provides nice, non-stacked fractions and better spacing
+% for units.
+\usepackage{units}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% Small sections of multiple columns
+\usepackage{multicol}
 
 
 % A bit more flexibility to avoid overfull boxes
@@ -90,6 +106,11 @@
 %% Small quote environment
 \newenvironment{smquote}{\begin{small}\begin{quote}}{\end{quote}\end{small}}
 
+\newcommand{\allcaps}[1]{\textsc{\MakeTextUppercase{#1}}}
+\newcommand{\smallcaps}[1]{\textsc{\MakeTextLowercase{#1}}}
+
+
+\renewcommand{\firstrefdash}{}
 
 % =============================================================================
 % Redefine formatting of footnotes and block quotes
@@ -112,6 +133,7 @@
 
 
 \usepackage[style=authoryear-comp,natbib,backend=bibtex,sorting=nyt,firstinits,url=false,doi=false,isbn=false,useprefix=false,sortcites=true]{biblatex}
+% \usepackage[style=authortitle-comp,sorting=nyt,firstinits,natbib,url=false,doi=false,isbn=false,backend=bibtex]{biblatex}
 
 % Removed option firstinits
 
@@ -182,6 +204,45 @@
    }%
 }%
 
+% \let\abx@macro@citeyearOrig\abx@macro@citeyear
+% \renewbibmacro{citeyear}{%
+%    \bibhyperref{%
+%    \let\bibhyperref\relax\relax%
+%    \abx@macro@citeyearOrig%
+%    }%
+% }%
+
+% \let\abx@macro@citeyearparOrig\abx@macro@citeyearpar
+% \renewbibmacro{citeyearpar}{%
+%    \bibhyperref{%
+%    \let\bibhyperref\relax\relax%
+%    \abx@macro@citeyearparOrig%
+%    }%
+% }%
+
+% \DeclareCiteCommand{\citeyear}
+%     {\usebibmacro{prenote}}
+%     {\bibhyperref{\printdate}}
+%     {\multicitedelim}
+%     {\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\citeyear}
+    {\usebibmacro{prenote}}
+    {\bibhyperref{\printdateextra}}
+    {\multicitedelim}
+    {\usebibmacro{postnote}}    
+
+% \DeclareCiteCommand{\citeyearpar}
+%     {\usebibmacro{prenote}}
+%     {\mkbibparens{\bibhyperref{\printdate}}}
+%     {\multicitedelim}
+%     {\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\citeyearpar}[\mkbibparens]
+    {\usebibmacro{prenote}}
+    {\bibhyperref{\printdateextra}}
+    {\multicitedelim}
+    {\usebibmacro{postnote}}    
 
 %\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\nolinkurl{doi:#1}}}
 
@@ -302,8 +363,8 @@
 \if@screen
   \hypersetup{breaklinks=true,
   colorlinks=true,
-  linkcolor=Mahogany,
-  urlcolor=Mahogany,
+  linkcolor=Maroon,
+  urlcolor=Maroon,
   citecolor=BlueViolet,
   plainpages=false,
     pdfpagelabels,
