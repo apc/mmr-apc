@@ -4,6 +4,7 @@
 
 \LoadClass[a4paper,11pt,oneside,article]{memoir}
 \usepackage{apc-basic}
+\usepackage{xstring}
 
 \def\@location{}
 \newcommand*{\location}[1]{%
@@ -15,20 +16,39 @@
   \gdef\@email{#1}%
 }
 
+\def\@term{\textsc{term}}
+\newcommand*{\term}[1]{%
+  \gdef\@term{#1}%
+}
+
+\def\@course{\textsc{course}}
+\newcommand*{\course}[1]{%
+    \gdef\@course{#1}%
+}
+
 \def\@affiliation{}
 \newcommand*{\myaffiliation}[1]{%
   \gdef\@affiliation{#1}%
 }
 
+% The definitions below are adapted from:
+% http://tex.stackexchange.com/questions/44919/proper-way-to-detect-empty-blank-text
+\newcommand{\DoIfNoText}[1]{%
+  \begingroup
+  \sbox0{#1}%
+  \ifdim\wd0=\z@
+    \endgroup
+    \expandafter\@gobble
+  \else
+    \endgroup
+    \expandafter\@firstofone
+  \fi}
 
-\let\oldmaketitle\maketitle
-\renewcommand*{\maketitle}{
-\begin{center}
-{\LARGE\textsc{\MakeLowercase\@title}}  \\[.35\baselineskip]
-{\large(\textit{Or: Expressivism on the cheap})}\\[.35\baselineskip]
-{\footnotesize \@author{} \ \textbullet  \ \ \texttt{\@email{}} \ $\divides$ \ \smallcaps{\@location{}} \ \textbullet \ \ \smallcaps{\@date} }
-\end{center}
-\vspace{.1\baselineskip}
+\def\@mysubtitle{}
+\newcommand*{\subtitle}[1]{%
+ \DoIfNoText{#1}{%
+    \gdef\@mysubtitle{\ignorespaces#1}%
+    }
 }
 
 
@@ -102,3 +122,49 @@
     %\abstractrunin
 
    }
+
+\newif\if@talk\@talktrue
+\newif\if@quiz\@quiztrue
+
+\DeclareOption{talk}{\@quizfalse \@talktrue}
+\DeclareOption{quiz}{\@quiztrue \@talkfalse}
+
+\ExecuteOptions{talk}
+
+\ProcessOptions\relax
+
+\let\oldmaketitle\maketitle
+
+\if@talk
+\renewcommand*{\maketitle}{
+\begin{center}
+{\LARGE\textsc{\MakeLowercase\@title}}  \\[.35\baselineskip]
+\DoIfNoText{\@mysubtitle}{%
+\large\emph{\@mysubtitle} \par%
+}
+%\DoIfNoText{\subtitle}{\large\emph{\@mysubtitle} \par\vskip{.35\baselineskip}}
+{\footnotesize \@author{} \ \textbullet  \ \ \texttt{\@email{}} \ $\divides$ \ \smallcaps{\@location{}} \ \textbullet \ \ \smallcaps{\@date} }
+\end{center}
+\vspace{.1\baselineskip}
+}
+\else\relax
+\fi
+\if@quiz
+\renewcommand*{\maketitle}{
+{\large\textsc{\MakeLowercase\@course \ $\divides$ \MakeLowercase\@term}} \hfill {\large\textsc{\MakeLowercase\@title}} \\[.5\baselineskip]
+{\footnotesize\textsf{NetID:}~ \rule[-.5mm]{21.5mm}{.05pt}}  \hfill {\footnotesize\textsc{\MakeLowercase{\@date}}}\par
+%\vspace{.15\baselineskip}
+%\noindent
+%{\scriptsize\textsf{NetID:}~ \rule[-.5mm]{33.5mm}{.05pt}}\par
+%{\hspace{-.75cm}\scriptsize\textsf{NetID:}~ \rule[-1mm]{50mm}{.1pt}} \par
+%{\hspace*{-.7cm}\scriptsize\textsf{NetID:}~ \rule[-1mm]{20mm}{.1pt} }\par
+%\hrule
+\bigskip
+
+\bigskip
+
+\bigskip
+}
+\else\relax
+\fi
+

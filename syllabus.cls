@@ -70,16 +70,19 @@
 \usepackage[style=authortitle-comp,sorting=nyt,firstinits,natbib,url=false,doi=false,isbn=false,backend=bibtex]{biblatex}
 \renewcommand{\nameyeardelim}{ }
 \renewcommand*\bibnamedash{\rule[0.5ex]{23pt}{0.3pt} }
-%Clear day and month fields. 
+%Clear day, month, and language fields. 
 \AtEveryBibitem{
   \clearfield{day}
   \clearfield{month}
   \clearfield{endday}
   \clearfield{endmonth}
+  \clearlist{language}
 }
 
 %Make references font smaller.
 \renewcommand{\bibfont}{\normalfont\small}
+
+\newcommand{\smallcaps}[1]{\textsc{\MakeLowercase{#1}}}
 
 % Remove comma between author and year in citations. 
 \renewcommand{\nameyeardelim}{ }
@@ -137,6 +140,9 @@
 \tolerance=200
 \setlength{\emergencystretch}{2em}
 
+\DefineBibliographyStrings{english}{%
+  references = {Bibliography},% replace "references" with "bibliography"  
+}
 % -------------------------------------------------------------------------
 % Typography: Specify your fonts of choice here.
 % -------------------------------------------------------------------------
@@ -200,7 +206,6 @@
 	\setbeforesubsecskip{3ex}
 
     % set name of bibliography to 'bibliography'
-    \renewcommand*{\bibname}{\mdseries\Large\scshape\MakeLowercase Bibliography}
 
     % Title flush left
     \pretitle{\vskip 3.25em\flushleft\Large\scshape\MakeLowercase}
@@ -278,6 +283,7 @@
   }
 %(end)
 
+
 \makepagestyle{default}
 \newcommand{\@defaultmarks}{%
   \let\@mkboth\markboth
@@ -294,8 +300,8 @@
 }
 \makepsmarks{default}{\@defaultmarks}
 \makepsmarks{default}{}
-\makeoddhead{default}{\scshape\thepage}{}{}
-\makeevenhead{default}{}{}{\scshape\thepage}
+\makeevenhead{default}{\scshape\thepage}{}{}
+\makeoddhead{default}{}{}{\scshape\thepage}
 \makeevenfoot{default}{}{}{\vspace*{-0.5in}{\scriptsize\textsf{\color{Gray} \courseshort \ // \puBa \ -- Last updated: \shorttoday}}}
 \makeoddfoot{default}{\vspace*{-0.5in}{\scriptsize\textsf{\color{Gray} \courseshort \ // \puBa \ -- Last updated: \shorttoday}}}{}{}
 
@@ -327,16 +333,17 @@
 % Personal information. Redefine accordingly.
 % ---------------------------------------------------------------------
 
-\newcommand{\myoffice}{STO-132}
+\newcommand{\myoffice}{Bartlett 363}
 \newcommand{\myhomepage}{\href{http://perezcarballo.org}{perezcarballo.org}}
 \newcommand{\coursename}{Course name}
 \newcommand{\courseshort}{}
 \newcommand{\courseroom}{Room}
 \newcommand{\courseweb}{course website}
 \newcommand{\myaff}{}
-\newcommand{\coursemeets}{}
-\newcommand{\myem}{aperezca@usc.edu}
-\date{{\scriptsize\href{mailto:\myem}{\textsf\myem}}\\[.01em] {\scriptsize\textsc{\MakeTextLowercase\myoffice}}}
+\newcommand{\coursemeetswhen}{}
+\newcommand{\coursemeetswhere}{}
+\newcommand{\myem}{apc@umass.edu}
+\date{{\scriptsize\href{mailto:\myem}{\textsf\myem}}\\[.01em] {\scriptsize{\myoffice}}}
 \title{\coursename}
 
 
@@ -347,12 +354,13 @@
 \newcommand{\course}[1]{\renewcommand{\coursename}{{#1}\xspace}}
 \newcommand{\courseno}[1]{\renewcommand{\courseshort}{{#1}\xspace}}
 \newcommand{\blurb}[1]{\renewcommand{\courseblurb}{#1}}
-\newcommand{\meets}[1]{\renewcommand{\coursemeets}{#1}}
+\newcommand{\where}[1]{\renewcommand{\coursemeetswhere}{#1}}
+\newcommand{\when}[1]{\renewcommand{\coursemeetswhen}{#1}}
 \newcommand{\room}[1]{\renewcommand{\courseroom}{#1}}
 \newcommand{\term}[1]{% 
    \gdef\puBa{#1}
 \renewcommand{\maketitlehooka}{% 
-       \par\noindent{\scriptsize\textsf\puBa \ {\color{BrickRed} //} \textsf\coursemeets} \\[-.3\baselineskip] \textsf{\color{Gray}\scriptsize\textsf Last updated: \shorttoday}}} 
+       \par\noindent{\scriptsize\textsf\puBa \ {\color{BrickRed} //} \textsf{\coursemeetswhen,{} \coursemeetswhere}} \\[-.3\baselineskip] \textsf{\color{Gray}\scriptsize\textsf Last updated: \shorttoday}}} 
 \newcommand{\puBa}{} 
 
 \newcommand{\headernote}[1]{% 
@@ -361,7 +369,7 @@
        \par\noindent{\scriptsize\textsf\puB}}} 
 \newcommand{\puB}{}
 
-\newcommand{\meetings}{Meetings: \textsc{\MakeTextLowercase\coursemeets}}
+\newcommand{\meetings}{Meetings: \smallcaps{\coursemeetswhen}, \coursemeetswhere}
 \newcommand{\coursewebsite}{Course website: \textsf\courseweb}
 
 \newcommand{\summary}[1]{
@@ -467,6 +475,7 @@
   \AdvanceDate[7]}
   \else\relax
   \fi
+
 
 
 \endinput
