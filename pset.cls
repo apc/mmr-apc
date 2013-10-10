@@ -17,8 +17,9 @@
 \usepackage{linguex}
 \usepackage{hyperref}
 \urlstyle{rm}
-\usepackage{color}  
-\usepackage{colornames}     
+% \usepackage{color}  
+% \usepackage{colornames}     
+\usepackage[dvipsnames]{xcolor}  
 \usepackage{memhfixc}
 
 % Bibliography options for biblatex (fold)
